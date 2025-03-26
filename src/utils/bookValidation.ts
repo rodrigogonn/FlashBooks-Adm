@@ -1,22 +1,29 @@
 import { z } from 'zod';
 import { categories } from '../constants/categories';
+import { ContentType, KeyPointType } from '../types/book';
 
 const validCategoryIds = new Set(categories.map((category) => category.id));
-
-enum ContentType {
-  PARAGRAPH = 'PARAGRAPH',
-}
 
 const paragraphSchema = z.object({
   type: z.literal(ContentType.PARAGRAPH),
   text: z.string().min(1, { message: 'Paragraph text is required.' }),
 });
 
+const keyPointSchema = z.object({
+  type: z.literal(ContentType.KEY_POINT),
+  keyPointType: z.nativeEnum(KeyPointType),
+  text: z.string().min(1, { message: 'Key point text is required.' }),
+  context: z.string().optional(),
+  reference: z.string().optional(),
+});
+
 const chapterSchema = z.object({
   title: z.string().min(1, { message: 'Chapter title is required.' }),
-  content: z.array(z.discriminatedUnion('type', [paragraphSchema])).nonempty({
-    message: 'Chapter content cannot be empty.',
-  }),
+  content: z
+    .array(z.discriminatedUnion('type', [paragraphSchema, keyPointSchema]))
+    .nonempty({
+      message: 'Chapter content cannot be empty.',
+    }),
 });
 
 export const bookValidation = z.object({
@@ -25,8 +32,14 @@ export const bookValidation = z.object({
   image: z
     .instanceof(File)
     .refine(
-      (file) => ['image/jpeg', 'image/png', 'image/gif'].includes(file.type),
-      { message: 'Invalid image format. Only JPEG, PNG, and GIF are allowed.' }
+      (file) =>
+        ['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(
+          file.type
+        ),
+      {
+        message:
+          'Invalid image format. Only JPEG, PNG, GIF, and WebP are allowed.',
+      }
     ),
   description: z.string().min(1, { message: 'Book description is required.' }),
   chapters: z

@@ -1,5 +1,5 @@
 import '../../App.css';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { z } from 'zod';
 import Editor from '@monaco-editor/react';
 import { Book, bookValidation } from '../../utils/bookValidation';
@@ -82,6 +82,7 @@ const JsonInputForm = ({ onSubmit, loading }: JsonInputFormProps) => {
     )
   );
   const [imageFile, setImageFile] = useState<File>();
+  const [isDragging, setIsDragging] = useState(false);
   const imageUrl = useMemo(
     () => imageFile && URL.createObjectURL(imageFile),
     [imageFile]
@@ -89,12 +90,52 @@ const JsonInputForm = ({ onSubmit, loading }: JsonInputFormProps) => {
 
   const [validationError, setValidationError] = useState('');
 
+  const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      const image = files[0];
+      if (image.type.startsWith('image/')) {
+        setImageFile(image);
+      } else {
+        setValidationError('Por favor, selecione apenas arquivos de imagem.');
+      }
+    }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files?.length) {
+      const image = event.target.files[0];
+      setImageFile(image);
+    } else {
+      setImageFile(undefined);
+    }
+  };
+
   const handleJsonChange = (value: string | undefined) => {
     const input = value || '';
     setJsonInput(input);
+  };
 
+  useEffect(() => {
+    validateJson(jsonInput);
+  }, [jsonInput, imageFile]);
+
+  const validateJson = (json: string) => {
     try {
-      const parsedInput = JSON.parse(input);
+      const parsedInput = JSON.parse(json);
       const validatedData = bookValidation
         .omit({
           image: true,
@@ -117,15 +158,6 @@ const JsonInputForm = ({ onSubmit, loading }: JsonInputFormProps) => {
       } else {
         setValidationError((error as Error).message);
       }
-    }
-  };
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files?.length) {
-      const image = event.target.files[0];
-      setImageFile(image);
-    } else {
-      setImageFile(undefined);
     }
   };
 
@@ -167,7 +199,14 @@ const JsonInputForm = ({ onSubmit, loading }: JsonInputFormProps) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '16px',
+        }}>
         <Editor
           defaultLanguage="json"
           defaultValue={jsonInput}
@@ -179,13 +218,26 @@ const JsonInputForm = ({ onSubmit, loading }: JsonInputFormProps) => {
         {validationError && (
           <p style={{ color: 'red', maxWidth: '800px' }}>{validationError}</p>
         )}
-        <br />
+
         <label
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
           style={{
             cursor: 'pointer',
+            border: isDragging ? '2px dashed #4CAF50' : '2px dashed #ccc',
+            borderRadius: '8px',
+            padding: '16px',
+            textAlign: 'center',
+            width: 'fit-content',
+            backgroundColor: isDragging
+              ? 'rgba(76, 175, 80, 0.1)'
+              : 'transparent',
+            transition: 'all 0.3s ease',
+            display: 'block',
           }}>
           <img
-            src={imageUrl ? imageUrl : 'https://via.placeholder.com/160x230'}
+            src={imageUrl ? imageUrl : 'https://placehold.co/160x230'}
             alt="Book cover"
             style={{
               width: 'calc(160px * 1.5)',
@@ -194,14 +246,22 @@ const JsonInputForm = ({ onSubmit, loading }: JsonInputFormProps) => {
               borderRadius: '8px',
             }}
           />
+          <p
+            style={{
+              marginTop: '10px',
+              color: '#666',
+              margin: 0,
+              fontSize: 24,
+            }}>
+            Arraste uma imagem aqui ou clique para selecionar
+          </p>
           <input
             hidden
             type="file"
-            accept=".jpeg,.jpg,.png,.gif"
+            accept=".jpeg,.jpg,.png,.gif,.webp"
             onChange={handleImageChange}
           />
         </label>
-        <br />
         <button disabled={loading} type="submit">
           {loading ? 'Loading...' : 'Submit'}
         </button>
