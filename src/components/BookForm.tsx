@@ -272,7 +272,13 @@ export function BookForm({
           onDragLeave={handlePdfDragLeave}
           onDrop={handlePdfDrop}
           onClick={() => document.getElementById('pdf-input')?.click()}>
-          <p>Arraste um PDF aqui ou clique para selecionar</p>
+          <p>
+            Arraste um PDF aqui ou clique para selecionar e extrair dados
+            automaticamente
+          </p>
+          <p className="pdf-hint">
+            Isso ajudará a preencher o formulário com dados do PDF
+          </p>
           <input
             id="pdf-input"
             type="file"
