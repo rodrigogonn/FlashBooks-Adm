@@ -5,10 +5,8 @@ export enum ContentType {
 
 export enum KeyPointType {
   QUOTE = 'QUOTE',
-  LESSON = 'LESSON',
   INSIGHT = 'INSIGHT',
   MOMENT = 'MOMENT',
-  CONCEPT = 'CONCEPT',
 }
 
 export interface Paragraph {
@@ -20,7 +18,6 @@ export interface KeyPoint {
   type: ContentType.KEY_POINT;
   keyPointType: KeyPointType;
   text: string;
-  context?: string;
   reference?: string;
 }
 
@@ -32,10 +29,14 @@ export interface Chapter {
 }
 
 export interface Book {
+  id: string;
   title: string;
   author: string;
   description: string;
   chapters: Chapter[];
   categoryIds: number[];
   purchaseLink?: string;
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
 }

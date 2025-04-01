@@ -1,16 +1,43 @@
+import './styles/global.css';
 import './App.css';
-import { useState } from 'react';
-import { Login } from './pages/Login';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { LoginPage } from './pages/Login';
 import { Home } from './pages/Home';
+import { BookFormPage } from './pages/BookForm';
+import { PrivateRoute } from './components/PrivateRoute';
 
 function App() {
-  const [token, setToken] = useState('');
-
-  if (!token) {
-    return <Login onFetchToken={setToken} />;
-  }
-
-  return <Home token={token} />;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/books/new"
+          element={
+            <PrivateRoute>
+              <BookFormPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/books/:id/edit"
+          element={
+            <PrivateRoute>
+              <BookFormPage />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

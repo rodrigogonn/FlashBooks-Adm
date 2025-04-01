@@ -1,0 +1,290 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+form > div {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+}
+
+form input[type='url'] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: #2d2d2d;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+form input[type='url']:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.image-upload {
+  position: relative;
+  width: 100%;
+  border: 2px dashed #444;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  background-color: #2d2d2d;
+  box-sizing: border-box;
+  padding: 2rem;
+}
+
+.image-upload.dragging {
+  border-color: #4a90e2;
+  background-color: rgba(74, 144, 226, 0.1);
+}
+
+.image-upload .book-image {
+  width: 160px;
+  height: 230px;
+  object-fit: cover;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+
+.image-upload p {
+  position: static;
+  transform: none;
+  margin: 0;
+  font-size: 0.9rem;
+  color: #999;
+  text-align: center;
+  background-color: rgba(45, 45, 45, 0.9);
+  padding: 4px 8px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  backdrop-filter: blur(4px);
+}
+
+.remove-image {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(45, 45, 45, 0.9);
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.9rem;
+  color: #e0e0e0;
+  cursor: pointer;
+  z-index: 1;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.remove-image:hover {
+  background-color: #ff4444;
+  color: white;
+}
+
+.form-actions {
+  margin-top: 1rem;
+  box-sizing: border-box;
+}
+
+.success {
+  background-color: #4caf50;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.success:hover {
+  background-color: #45a049;
+}
+
+.success:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+/* Preview styles */
+.preview-section {
+  width: 100%;
+  margin-top: 2rem;
+  box-sizing: border-box;
+  background-color: #1e1e1e;
+}
+
+.preview-section h2 {
+  color: #e0e0e0;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  font-weight: 500;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #333;
+}
+
+/* Error styles */
+.error-message {
+  color: #ff4444;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+/* Monaco Editor customization */
+.monaco-editor {
+  border-radius: 4px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Book Preview styles */
+.book-preview {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #1e1e1e;
+}
+
+.book-preview-header {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.book-preview-image {
+  width: 160px;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  background-color: #2d2d2d;
+}
+
+.book-preview-info {
+  flex: 1;
+  box-sizing: border-box;
+  min-width: 0; /* Previne que o conteúdo force o container a crescer */
+}
+
+.book-preview-info h1 {
+  margin: 0 0 0.5rem 0;
+  color: #e0e0e0;
+  font-size: 1.5rem;
+}
+
+.book-preview-info .author {
+  color: #999;
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+.book-preview-info .description {
+  color: #e0e0e0;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.book-preview-chapters h2 {
+  color: #e0e0e0;
+  font-size: 1.2rem;
+  margin: 0 0 1rem 0;
+  text-align: left;
+}
+
+.chapter {
+  background-color: #2d2d2d;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.chapter h3 {
+  color: #e0e0e0;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  text-align: left;
+}
+
+.chapter p {
+  color: #e0e0e0;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.chapter p:last-child {
+  margin-bottom: 0;
+}
+
+.key-points {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #444;
+}
+
+.key-points h4 {
+  color: #e0e0e0;
+  font-size: 1rem;
+  margin: 0 0 0.5rem 0;
+  text-align: left;
+}
+
+.key-points ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.key-points li {
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.key-points li::before {
+  content: '•';
+  color: #4a90e2;
+  position: absolute;
+  left: 0;
+}

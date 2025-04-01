@@ -1,0 +1,149 @@
+.book-preview {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  font-family: 'Comfortaa', sans-serif;
+  padding: 0 1rem;
+}
+
+.book-preview-header {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.book-preview-image {
+  width: 160px;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  background-color: #2d2d2d;
+}
+
+.book-preview-info {
+  flex: 1;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.book-preview-info h1 {
+  margin: 0 0 0.5rem 0;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.book-preview-info .author {
+  color: #e0e0e0;
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+.book-preview-info .description {
+  color: #e0e0e0;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.category-tag {
+  background-color: #2d2d2d;
+  color: #e0e0e0;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #404040;
+  transition: all 0.2s ease;
+}
+
+.category-tag:hover {
+  background-color: #363636;
+  border-color: #505050;
+}
+
+.category-emoji {
+  font-size: 0.9rem;
+}
+
+.chapter {
+  background-color: #2d2d2d;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.chapter h3 {
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.chapter-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.paragraph {
+  color: #e0e0e0;
+  margin: 0;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.key-point {
+  padding: 12px 16px;
+  margin: 0;
+}
+
+.key-point-text {
+  margin: 0;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  text-align: left;
+  letter-spacing: 0.3px;
+}
+
+.key-point-text.quote {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.key-point-text.insight {
+  color: #1e88e5;
+  font-weight: 700;
+}
+
+.key-point-text.moment {
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+.key-point-reference {
+  margin: 8px 0 0 0;
+  text-align: right;
+  color: #e0e0e0;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
