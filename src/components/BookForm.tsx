@@ -4,6 +4,7 @@ import { BookPreview } from './BookPreview';
 import { BookFormData } from '../types/bookForm';
 import { Editor } from '@monaco-editor/react';
 import { bookValidation } from '../utils/bookValidation';
+import { pdfExtractorService } from '../services/pdfExtractor';
 import '../styles/BookForm.css';
 
 interface BookFormProps {
@@ -25,6 +26,10 @@ export function BookForm({
 }: BookFormProps) {
   const [purchaseLink, setPurchaseLink] = useState(formData.purchaseLink || '');
   const [isDragging, setIsDragging] = useState(false);
+  const [isDraggingPdf, setIsDraggingPdf] = useState(false);
+  const [selectedPdf, setSelectedPdf] = useState<File | null>(null);
+  const [pdfExtracting, setPdfExtracting] = useState(false);
+  const [pdfError, setPdfError] = useState<string | null>(null);
   const [jsonInput, setJsonInput] = useState(
     JSON.stringify(
       {
@@ -196,13 +201,106 @@ export function BookForm({
     } as unknown as React.ChangeEvent<HTMLInputElement>);
   };
 
+  const handlePdfDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingPdf(true);
+  };
+
+  const handlePdfDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingPdf(false);
+  };
+
+  const handlePdfDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingPdf(false);
+
+    const droppedFiles = e.dataTransfer.files;
+    if (droppedFiles && droppedFiles.length > 0) {
+      const file = droppedFiles[0];
+      if (file.type === 'application/pdf') {
+        setSelectedPdf(file);
+      }
+    }
+  };
+
+  const handlePdfFileSelect = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (file && file.type === 'application/pdf') {
+      setSelectedPdf(file);
+    }
+  };
+
+  const handlePdfExtraction = async () => {
+    if (!selectedPdf) return;
+
+    setPdfExtracting(true);
+    setPdfError(null);
+    try {
+      const bookData = await pdfExtractorService.extractBookData(selectedPdf);
+      const jsonString = JSON.stringify(
+        {
+          title: bookData.title,
+          author: bookData.author,
+          description: bookData.description,
+          chapters: bookData.chapters,
+          categoryIds: bookData.categoryIds,
+        },
+        null,
+        2
+      );
+      setJsonInput(jsonString);
+    } catch (error) {
+      console.error('Erro ao extrair dados do PDF:', error);
+      setPdfError('Erro ao extrair dados do PDF. Por favor, tente novamente.');
+    } finally {
+      setPdfExtracting(false);
+    }
+  };
+
   return (
     <div className="form-container">
+      <div className="pdf-upload-section">
+        <div
+          className={`pdf-upload ${isDraggingPdf ? 'dragging' : ''}`}
+          onDragOver={handlePdfDragOver}
+          onDragLeave={handlePdfDragLeave}
+          onDrop={handlePdfDrop}
+          onClick={() => document.getElementById('pdf-input')?.click()}>
+          <p>Arraste um PDF aqui ou clique para selecionar</p>
+          <input
+            id="pdf-input"
+            type="file"
+            accept=".pdf"
+            onChange={handlePdfFileSelect}
+            hidden
+          />
+          {selectedPdf && (
+            <div className="pdf-actions" onClick={(e) => e.stopPropagation()}>
+              <p className="selected-file">{selectedPdf.name}</p>
+              <button
+                type="button"
+                className="extract-button"
+                onClick={handlePdfExtraction}
+                disabled={pdfExtracting}>
+                {pdfExtracting ? 'Extraindo...' : 'Extrair Dados'}
+              </button>
+            </div>
+          )}
+          {pdfError && <p className="error-message">{pdfError}</p>}
+        </div>
+      </div>
+
       <form onSubmit={handleSubmit}>
         <div>
           <Editor
             defaultLanguage="json"
-            defaultValue={jsonInput}
+            value={jsonInput}
             theme="vs-dark"
             onChange={handleJsonChange}
             height={500}
