@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const pdfChapterSchema = z.object({
-  name: z.string().min(1, 'Nome do capítulo é obrigatório'),
+  title: z.string().min(1, 'Nome do capítulo é obrigatório'),
   startPage: z
     .number()
     .int()

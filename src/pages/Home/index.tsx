@@ -21,7 +21,13 @@ export const Home = () => {
     try {
       setLoading(true);
       const data = await booksService.list();
-      setBooks(data);
+      // Ordena os livros: não excluídos primeiro, depois os excluídos
+      const sortedBooks = [...data].sort((a, b) => {
+        if (a.deletedAt && !b.deletedAt) return 1;
+        if (!a.deletedAt && b.deletedAt) return -1;
+        return 0;
+      });
+      setBooks(sortedBooks);
     } finally {
       setLoading(false);
     }
@@ -67,7 +73,7 @@ export const Home = () => {
           {books.map((book) => (
             <div
               key={book.id}
-              className="book-card"
+              className={`book-card ${book.deletedAt ? 'deleted' : ''}`}
               onClick={() =>
                 navigate(`/books/${book.id}/edit`, { state: { book } })
               }>
@@ -75,6 +81,7 @@ export const Home = () => {
               <h3>{book.title}</h3>
               <div className="author">{book.author}</div>
               <div className="chapters">{book.chapters.length} capítulos</div>
+              {book.deletedAt && <div className="deleted-badge">Excluído</div>}
               <div className="actions">
                 <button
                   className="primary"
@@ -84,15 +91,17 @@ export const Home = () => {
                   }}>
                   Editar
                 </button>
-                <button
-                  className="danger"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setBookToDelete(book);
-                    setDeleteModalOpen(true);
-                  }}>
-                  Excluir
-                </button>
+                {!book.deletedAt && (
+                  <button
+                    className="danger"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setBookToDelete(book);
+                      setDeleteModalOpen(true);
+                    }}>
+                    Excluir
+                  </button>
+                )}
               </div>
             </div>
           ))}

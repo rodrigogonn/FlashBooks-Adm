@@ -35,7 +35,7 @@ export function BookForm({
     JSON.stringify(
       [
         {
-          name: 'Capítulo 1',
+          title: 'Capítulo 1',
           startPage: 1,
         },
       ],

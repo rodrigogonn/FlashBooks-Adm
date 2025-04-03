@@ -129,6 +129,7 @@ button.secondary:hover:not(:disabled) {
   flex-direction: column;
   cursor: pointer;
   width: 160px;
+  position: relative;
 }
 
 .book-card:hover {
@@ -402,4 +403,28 @@ button.secondary:hover:not(:disabled) {
 
 .modal-actions button:hover {
   opacity: 0.9;
+}
+
+.book-card.deleted {
+  opacity: 0.7;
+  background-color: #2a2a2a;
+  border: 1px solid #333;
+}
+
+.book-card.deleted img {
+  filter: grayscale(100%);
+}
+
+.deleted-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: var(--danger-color);
+  color: var(--text-primary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

@@ -23,7 +23,9 @@ export const booksService = {
     if (data.categoryIds) {
       formData.append('categoryIds', JSON.stringify(data.categoryIds));
     }
-    formData.append('purchaseLink', data.purchaseLink || '');
+    if (data.purchaseLink) {
+      formData.append('purchaseLink', data.purchaseLink);
+    }
 
     await booksApi.post('/api/books', formData, {
       headers: {
@@ -44,7 +46,9 @@ export const booksService = {
     if (data.categoryIds) {
       formData.append('categoryIds', JSON.stringify(data.categoryIds));
     }
-    formData.append('purchaseLink', data.purchaseLink || '');
+    if (data.purchaseLink) {
+      formData.append('purchaseLink', data.purchaseLink);
+    }
 
     await booksApi.put(`/api/books/${id}`, formData, {
       headers: {
