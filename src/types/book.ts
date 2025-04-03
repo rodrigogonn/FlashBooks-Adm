@@ -35,8 +35,9 @@ export interface Book {
   description: string;
   chapters: Chapter[];
   categoryIds: number[];
-  purchaseLink?: string;
+  purchaseLink?: string | null;
   imageUrl: string;
   createdAt: string;
   updatedAt: string;
+  deletedAt?: string | null;
 }

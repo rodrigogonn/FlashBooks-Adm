@@ -348,6 +348,7 @@ form input[type='url']:focus {
   gap: 1rem;
   margin-top: 1rem;
   z-index: 1;
+  width: 100%;
 }
 
 .selected-file {
@@ -381,4 +382,38 @@ form input[type='url']:focus {
 .extract-button:disabled {
   background-color: var(--text-secondary);
   cursor: not-allowed;
+}
+
+.pdf-chapters-editor {
+  width: 100%;
+  margin: 1rem 0;
+  background-color: var(--background-secondary);
+  border-radius: 8px;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.pdf-chapters-editor h3 {
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.pdf-chapters-editor .monaco-editor {
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.error-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.error-messages .error-message {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #ff4444;
 }

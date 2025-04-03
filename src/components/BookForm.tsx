@@ -5,6 +5,7 @@ import { BookFormData } from '../types/bookForm';
 import { Editor } from '@monaco-editor/react';
 import { bookValidation } from '../utils/bookValidation';
 import { pdfExtractorService } from '../services/pdfExtractor';
+import { pdfChaptersSchema } from '../utils/pdfValidation';
 import '../styles/BookForm.css';
 
 interface BookFormProps {
@@ -30,6 +31,22 @@ export function BookForm({
   const [selectedPdf, setSelectedPdf] = useState<File | null>(null);
   const [pdfExtracting, setPdfExtracting] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
+  const [pdfChaptersJson, setPdfChaptersJson] = useState(
+    JSON.stringify(
+      [
+        {
+          name: 'Capítulo 1',
+          startPage: 1,
+        },
+      ],
+      null,
+      2
+    )
+  );
+  const [pdfChaptersError, setPdfChaptersError] = useState<string | null>(null);
+  const [pdfChaptersErrors, setPdfChaptersErrors] = useState<
+    Record<string, string>
+  >({});
   const [jsonInput, setJsonInput] = useState(
     JSON.stringify(
       {
@@ -236,13 +253,55 @@ export function BookForm({
     }
   };
 
+  const handlePdfChaptersChange = (value: string | undefined) => {
+    const input = value || '';
+    setPdfChaptersJson(input);
+    validatePdfChapters(input);
+  };
+
+  const validatePdfChapters = (json: string) => {
+    try {
+      const parsedInput = JSON.parse(json);
+      const validationResult = pdfChaptersSchema.safeParse(parsedInput);
+
+      if (!validationResult.success) {
+        const errors: Record<string, string> = {};
+        validationResult.error.errors.forEach((error) => {
+          const path = error.path.join('.');
+          errors[path] = error.message;
+        });
+        setPdfChaptersErrors(errors);
+        setPdfChaptersError('Por favor, corrija os erros nos capítulos do PDF');
+      } else {
+        setPdfChaptersErrors({});
+        setPdfChaptersError(null);
+      }
+    } catch (error) {
+      setPdfChaptersErrors({ json: 'JSON inválido' });
+      setPdfChaptersError('JSON inválido');
+    }
+  };
+
   const handlePdfExtraction = async () => {
     if (!selectedPdf) return;
 
-    setPdfExtracting(true);
-    setPdfError(null);
     try {
-      const bookData = await pdfExtractorService.extractBookData(selectedPdf);
+      const parsedChapters = JSON.parse(pdfChaptersJson);
+      const validationResult = pdfChaptersSchema.safeParse(parsedChapters);
+
+      if (!validationResult.success) {
+        setPdfError(
+          'Por favor, corrija os erros nos capítulos do PDF antes de extrair.'
+        );
+        return;
+      }
+
+      setPdfExtracting(true);
+      setPdfError(null);
+      const bookData = await pdfExtractorService.extractBookData(
+        selectedPdf,
+        parsedChapters
+      );
       const jsonString = JSON.stringify(
         {
           title: bookData.title,
@@ -289,11 +348,34 @@ export function BookForm({
           {selectedPdf && (
             <div className="pdf-actions" onClick={(e) => e.stopPropagation()}>
               <p className="selected-file">{selectedPdf.name}</p>
+              <div className="pdf-chapters-editor">
+                <h3>Configuração dos Capítulos</h3>
+                <Editor
+                  defaultLanguage="json"
+                  value={pdfChaptersJson}
+                  theme="vs-dark"
+                  onChange={handlePdfChaptersChange}
+                  height={200}
+                  width="100%"
+                />
+                {pdfChaptersError && (
+                  <div className="error-messages">
+                    <p className="error-message">{pdfChaptersError}</p>
+                    {Object.entries(pdfChaptersErrors).map(
+                      ([path, message]) => (
+                        <p key={path} className="error-message">
+                          {path}: {message}
+                        </p>
+                      )
+                    )}
+                  </div>
+                )}
+              </div>
               <button
                 type="button"
                 className="extract-button"
                 onClick={handlePdfExtraction}
-                disabled={pdfExtracting}>
+                disabled={pdfExtracting || !!pdfChaptersError}>
                 {pdfExtracting ? 'Extraindo...' : 'Extrair Dados'}
               </button>
             </div>
