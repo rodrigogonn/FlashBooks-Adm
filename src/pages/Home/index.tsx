@@ -21,8 +21,14 @@ export const Home = () => {
     try {
       setLoading(true);
       const data = await booksService.list();
-      // Ordena os livros: não excluídos primeiro, depois os excluídos
-      const sortedBooks = [...data].sort((a, b) => {
+      // Primeiro ordena por updatedAt
+      const sortedByUpdatedAt = [...data].sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+      );
+
+      // Depois ordena para garantir que os deletados fiquem por último
+      const sortedBooks = [...sortedByUpdatedAt].sort((a, b) => {
         if (a.deletedAt && !b.deletedAt) return 1;
         if (!a.deletedAt && b.deletedAt) return -1;
         return 0;

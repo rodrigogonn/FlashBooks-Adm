@@ -83,10 +83,11 @@ export const BookFormPage = () => {
     <div className="App">
       <header className="App-header">
         <div className="page-header">
-          <h1>{id ? 'Editar Livro' : 'Novo Livro'}</h1>
           <button className="secondary" onClick={() => navigate('/')}>
             Voltar
           </button>
+          <h1>{id ? 'Editar Livro' : 'Novo Livro'}</h1>
+          <div style={{ width: '80px' }}></div>
         </div>
 
         <BookForm
