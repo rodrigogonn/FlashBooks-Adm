@@ -7,8 +7,8 @@
 }
 
 body {
-  background-color: #121212;
-  color: #e0e0e0;
+  background-color: var(--background);
+  color: var(--text-secondary);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   line-height: 1.5;
@@ -27,6 +27,10 @@ body {
   --text-secondary: #e0e0e0;
   --background: #121212;
   --card-background: #1e1e1e;
+  --border-color: #333333;
+  --input-background: #2a2a2a;
+  --input-placeholder: #666666;
+  --modal-overlay: rgba(0, 0, 0, 0.5);
   --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
     0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
@@ -35,6 +39,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  text-align: center;
 }
 
 .App-header {
@@ -44,6 +49,9 @@ body {
   align-items: center;
   min-height: 100vh;
   justify-content: flex-start;
+  font-size: calc(10px + 2vmin);
+  background-color: var(--card-background);
+  color: var(--text-primary);
 }
 
 /* Estilos específicos para a página de login */
@@ -111,8 +119,9 @@ button.success:hover:not(:disabled) {
 }
 
 button.secondary {
-  background-color: #333333;
+  background-color: var(--border-color);
   color: var(--text-primary);
+  border: 1px solid var(--border-color);
 }
 
 button.secondary:hover:not(:disabled) {
@@ -208,10 +217,10 @@ button.secondary:hover:not(:disabled) {
 .form-container textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #333333;
+  border: 1px solid var(--border-color);
   border-radius: 0.375rem;
   margin-bottom: 1rem;
-  background-color: #2a2a2a;
+  background-color: var(--input-background);
   color: var(--text-primary);
   font-size: 1rem;
   transition: border-color 0.2s;
@@ -229,11 +238,11 @@ button.secondary:hover:not(:disabled) {
 .form-container input[type='text']::placeholder,
 .form-container input[type='password']::placeholder,
 .form-container input[type='url']::placeholder {
-  color: #666666;
+  color: var(--input-placeholder);
 }
 
 .chapter-container {
-  background-color: #2a2a2a;
+  background-color: var(--input-background);
   padding: 1rem;
   border-radius: 0.375rem;
   margin-bottom: 1rem;
@@ -339,7 +348,7 @@ button.secondary:hover:not(:disabled) {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--modal-overlay);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -381,7 +390,7 @@ button.secondary:hover:not(:disabled) {
 }
 
 .modal-actions button.cancel {
-  background-color: #333;
+  background-color: var(--border-color);
   color: var(--text-primary);
 }
 

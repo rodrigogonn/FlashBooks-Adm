@@ -49,7 +49,7 @@ export const LoginPage = () => {
               disabled={loading}
             />
             {error && <div className="error">{error}</div>}
-            <button type="submit" disabled={loading}>
+            <button type="submit" className="primary" disabled={loading}>
               {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
